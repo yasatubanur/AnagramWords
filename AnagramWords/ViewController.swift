@@ -15,7 +15,6 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForAnswer))
-        
         navigationController?.navigationBar.prefersLargeTitles = true
         
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt"){
@@ -23,7 +22,6 @@ class ViewController: UITableViewController {
                 allWords = startWords.components(separatedBy: "\n")
             }
         }
-        
         if allWords.isEmpty{
             allWords = ["silkworm"]
         }
@@ -42,6 +40,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(usedWords.count)
         return usedWords.count
     }
     
@@ -66,7 +65,30 @@ class ViewController: UITableViewController {
     }
     
     func submit(_ answer: String){
+        let lowerAnswer = answer.lowercased()
         
+        if isPossible(word: lowerAnswer){
+            if isOriginal(worrd: lowerAnswer){
+                if isReal(word: lowerAnswer){
+                    usedWords.insert(answer, at: 0)
+                    
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    tableView.insertRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }
+    }
+    
+    func isPossible(word: String) -> Bool {
+        return true
+    }
+    
+    func isOriginal(worrd: String) -> Bool {
+        return true
+    }
+    
+    func isReal(word: String) -> Bool {
+        return true
     }
 }
 
