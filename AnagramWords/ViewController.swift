@@ -68,7 +68,7 @@ class ViewController: UITableViewController {
         let lowerAnswer = answer.lowercased()
         
         if isPossible(word: lowerAnswer){
-            if isOriginal(worrd: lowerAnswer){
+            if isOriginal(word: lowerAnswer){
                 if isReal(word: lowerAnswer){
                     usedWords.insert(answer, at: 0)
                     
@@ -83,8 +83,8 @@ class ViewController: UITableViewController {
         return true
     }
     
-    func isOriginal(worrd: String) -> Bool {
-        return true
+    func isOriginal(word: String) -> Bool {
+        return !usedWords.contains(word)
     }
     
     func isReal(word: String) -> Bool {
