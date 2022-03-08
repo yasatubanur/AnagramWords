@@ -16,6 +16,7 @@ class ViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForAnswer))
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(changeWord))
         
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt"){
             if let startWords = try? String(contentsOf: startWordsURL){
@@ -62,6 +63,11 @@ class ViewController: UITableViewController {
         
         ac.addAction(submitAction)
         present(ac,animated: true)
+    }
+    
+    @objc func changeWord(){
+        let newWord = allWords.shuffled()
+        title = newWord.randomElement()
     }
     
     func submit(_ answer: String){
