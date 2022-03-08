@@ -67,36 +67,38 @@ class ViewController: UITableViewController {
     func submit(_ answer: String){
         let lowerAnswer = answer.lowercased()
         
-        let errorTitle: String
-        let errorMessage: String
-        
-        if isPossible(word: lowerAnswer){
-            if isOriginal(word: lowerAnswer){
-                if isReal(word: lowerAnswer){
-                    usedWords.insert(answer, at: 0)
-                    
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    tableView.insertRows(at: [indexPath], with: .automatic)
-                    
-                    return
-                }else{
-                    errorTitle = "Word not recognized"
-                    errorMessage = "You can't just make them up, you know!"
+        guard isPossible(word: lowerAnswer) else {
+            showErrorMessage(title: "Word not possible", message: "You cant just make stuff up")
+            return
                 }
-            }else{
-                errorTitle = "Word used already!"
-                errorMessage = "Be more orginal !"
-            }
-        }else{
-            guard let title = title?.lowercased() else { return }
-            errorTitle = "Word not possible"
-            errorMessage = "You can't spell that word from \(title)"
+        
+        guard isOriginal(word: lowerAnswer) else {
+            showErrorMessage(title: "Word used already!", message: "Be more orginal !")
+            return
         }
         
-        let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(ac,animated: true)
-    }
+        guard isReal(word: lowerAnswer) else {
+            showErrorMessage(title: "Word not recognized", message: "You can't just make them up, you know!")
+            return
+        }
+                
+            usedWords.insert(answer, at: 0)
+                    
+            let indexPath = IndexPath(row: 0, section: 0)
+            tableView.insertRows(at: [indexPath], with: .automatic)
+                    
+            return
+        }
+        
+        func showErrorMessage(title: String, message: String){
+            let errorTitle = title
+            let errorMessage = message
+            
+            let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(ac,animated: true)
+        }
+
     
     func isPossible(word: String) -> Bool {
         guard var tempWord = title?.lowercased() else { return false }
@@ -118,7 +120,7 @@ class ViewController: UITableViewController {
     }
     
     func isReal(word: String) -> Bool {
-        guard word.count > 3 else {return false}
+        guard word.count >= 3 else {return false}
         
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
@@ -126,5 +128,5 @@ class ViewController: UITableViewController {
         
         return misspelledRange.location == NSNotFound
     }
-}
 
+}
